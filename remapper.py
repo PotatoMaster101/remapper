@@ -48,6 +48,7 @@ def get_mapped(inp, pool, ignore, errchar, hints):
         for (l, h) in zip(x, y):
             mapper[l] = h
             mapper[h] = l
+            pool = pool.translate(str.maketrans("", "", l + h))
     for ch in ignore:               # map ignored chars
         mapper[ch] = ch
 
