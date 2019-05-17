@@ -31,3 +31,13 @@ $ python3 remapper.py abcdef -l abc=xyz -v
 [+] Output:   xyz}&G
 ```
 
+Alphabeticals and brackets only: 
+```bash
+$ python3 remapper.py "remap me" --alph -p "(){}[]<>" -v
+[+] Map:      {'r': 'Y', 'e': 'K', 'm': '>', 'a': 'B', 'p': 'y', ' ': 'O'}
+[+] Original: remap me
+[+] Ignored:
+[+] Hints:    []
+[+] Output:   YK>ByO>K
+```
+
