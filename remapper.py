@@ -45,10 +45,10 @@ def get_mapped(inp, pool, ignore, errchar, hints):
     output = ""
     for h in hints:                 # map hints
         x, y = parse_hint(h)
+        pool = pool.translate(str.maketrans("", "", x + y))
         for (l, h) in zip(x, y):
             mapper[l] = h
             mapper[h] = l
-            pool = pool.translate(str.maketrans("", "", l + h))
     for ch in ignore:               # map ignored chars
         mapper[ch] = ch
 
@@ -92,12 +92,12 @@ def parse_hint(hint):
     split = hint.split("=")
     if len(split) != 2:
         print("[-] Failed to parse %s, not using." %hint)
-        return [], []
+        return "", ""
     split[0] = "".join(OrderedDict.fromkeys(split[0]))
     split[1] = "".join(OrderedDict.fromkeys(split[1]))
     if len(split[0]) != len(split[1]):
         print("[-] Counts of hint %s are not equal, not using." %hint)
-        return [], []
+        return "", ""
     return split[0], split[1]
 
 
