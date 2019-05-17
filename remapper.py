@@ -90,7 +90,7 @@ def parse_hint(hint):
     Parses the given hint in the form of x=y, returns x and y. 
     """
     split = hint.split("=")
-    if len(split) != 2:
+    if (len(split) != 2) or (not split[0]):     # test split[0] or split[1]
         print("[-] Failed to parse %s, not using." %hint)
         return "", ""
     split[0] = "".join(OrderedDict.fromkeys(split[0]))
