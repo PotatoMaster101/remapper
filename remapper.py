@@ -118,7 +118,6 @@ if __name__ == "__main__":
         hints = argp.hints
     inpstr = argp.input
 
-    print(pool)
     output, mapper = get_mapped(inpstr, pool, ignore, errchar, hints)
     if argp.verbose:
         print("[+] Map:      %s" %mapper)
