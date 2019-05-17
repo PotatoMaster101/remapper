@@ -11,6 +11,7 @@
 import argparse
 import string
 import random
+from collections import OrderedDict
 
 def get_args():
     """
@@ -91,8 +92,8 @@ def parse_hint(hint):
     if len(split) != 2:
         print("[-] Failed to parse %s, not using." %hint)
         return [], []
-    split[0] = "".join(set(split[0]))
-    split[1] = "".join(set(split[1]))
+    split[0] = "".join(OrderedDict.fromkeys(split[0]))
+    split[1] = "".join(OrderedDict.fromkeys(split[1]))
     if len(split[0]) != len(split[1]):
         print("[-] Counts of hint %s are not equal, not using." %hint)
         return [], []
