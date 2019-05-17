@@ -19,13 +19,17 @@ def get_args():
     p = argparse.ArgumentParser(description="Character remapper.")
     p.add_argument("input", type=str, 
             help="string to remap")
-    p.add_argument("-v", "--verbose", action="store_true", 
+    p.add_argument("-v", "--verbose", action="store_true", dest="verbose", 
             help="produce verbose output")
-    p.add_argument("-p", "--pool", type=str, dest="pool", default=None, 
+    p.add_argument("-a", "--alph", action="store_true", dest="alph", 
+            help="include all alphabetical characters")
+    p.add_argument("-an", "--alphnum", action="store_true", dest="alphnum", 
+            help="include all alphabetical and numerical characters")
+    p.add_argument("-p", "--pool", type=str, dest="pool", default="", 
             help="pool of random characters that can be mapped")
-    p.add_argument("-i", "--ignore", type=str, dest="ignore", default=None, 
+    p.add_argument("-i", "--ignore", type=str, dest="ignore", default="", 
             help="pool of characters to ignore")
-    p.add_argument("-e", "--error", type=str, dest="errchar", default=None, 
+    p.add_argument("-e", "--error", type=str, dest="errchar", default="", 
             help="error character style")
     p.add_argument("-l", "--list", type=str, nargs="+", dest="hints", 
             help="list of hints in the form of x=y", default=None)
@@ -59,6 +63,26 @@ def get_mapped(inp, pool, ignore, errchar, hints):
     return output, mapper
 
 
+def get_pool(pool, alph=False, alphnum=False, custom_pool=False):
+    """
+    Returns a pool of characters used for randomisation. 
+    """
+    ret = None
+    if alphnum and custom_pool:
+        ret = pool + string.ascii_letters + string.digits
+    elif alphnum:
+        ret = string.ascii_letters + string.digits
+    elif alph and custom_pool:
+        ret = pool + string.ascii_letters
+    elif alph:
+        ret = string.ascii_letters
+    elif pool:
+        ret = pool
+    else:
+        ret = string.ascii_letters + string.digits + string.punctuation
+    return "".join(set(ret))
+
+
 def parse_hint(hint):
     """
     Parses the given hint in the form of x=y, returns x and y. 
@@ -83,9 +107,8 @@ if __name__ == "__main__":
     errchar = "<ERROR>"
     if argp.errchar:
         errchar = argp.errchar
-    pool = string.ascii_letters + string.digits + string.punctuation
-    if argp.pool:
-        pool = argp.pool
+    pool = get_pool(argp.pool, argp.alph, argp.alphnum, argp.pool != None)
+    pool = "".join(set(pool))       # remove duplicated characters
     ignore = ""
     if argp.ignore:
         ignore = argp.ignore
@@ -95,7 +118,8 @@ if __name__ == "__main__":
         hints = argp.hints
     inpstr = argp.input
 
-    output, mapper = get_mapped(argp.input, pool, ignore, errchar, hints)
+    print(pool)
+    output, mapper = get_mapped(inpstr, pool, ignore, errchar, hints)
     if argp.verbose:
         print("[+] Map:      %s" %mapper)
         print("[+] Original: %s" %inpstr)
