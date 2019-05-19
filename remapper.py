@@ -109,7 +109,7 @@ if __name__ == "__main__":
     errchar = "<ERROR>"
     if argp.errchar:
         errchar = argp.errchar
-    pool = get_pool(argp.pool, argp.alph, argp.alphnum, argp.pool != None)
+    pool = get_pool(argp.pool, argp.alph, argp.alphnum, argp.pool != "")
     pool = "".join(set(pool))       # remove duplicated characters
     ignore = ""
     if argp.ignore:
