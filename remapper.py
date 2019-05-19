@@ -22,6 +22,8 @@ def get_args():
             help="string to remap")
     p.add_argument("-v", "--verbose", action="store_true", dest="verbose", 
             help="produce verbose output")
+    p.add_argument("-p", "--pool", type=str, dest="pool", default="", 
+            help="pool of random characters that can be mapped")
     p.add_argument("-a", "--alpha", action="store_true", dest="alph", 
             help="include all alphabetical characters")
     p.add_argument("-n", "--num", action="store_true", dest="num", 
@@ -30,10 +32,12 @@ def get_args():
             help="include all lower alphabetical characters")
     p.add_argument("-aU", "--upper", action="store_true", dest="alphup", 
             help="include all upper alphabetical characters")
-    p.add_argument("-p", "--pool", type=str, dest="pool", default="", 
-            help="pool of random characters that can be mapped")
     p.add_argument("-i", "--ignore", type=str, dest="ignore", default="", 
             help="pool of characters to ignore")
+    p.add_argument("-iP", "--ignore-punc", action="store_true", dest="igp", 
+            help="ignore all punctuations")
+    p.add_argument("-iN", "--ignore-num", action="store_true", dest="ign", 
+            help="ignore all numerical characters")
     p.add_argument("-e", "--error", type=str, dest="errchar", default="", 
             help="error character style")
     p.add_argument("-l", "--list", type=str, nargs="+", dest="hints", 
@@ -87,6 +91,18 @@ def get_pool(argp):
     return "".join(set(ret))
 
 
+def get_ignore(argp):
+    """
+    Returns a pool of characters which will be ignored. 
+    """
+    ret = argp.ignore
+    if argp.igp:
+        ret += string.punctuation + " "
+    if argp.ign:
+        ret += string.digits
+    return "".join(set(ret))
+
+
 def parse_hint(hint):
     """
     Parses the given hint in the form of x=y, returns x and y. 
@@ -112,10 +128,8 @@ if __name__ == "__main__":
     if argp.errchar:
         errchar = argp.errchar
     pool = get_pool(argp)
-    ignore = ""
-    if argp.ignore:
-        ignore = argp.ignore
-        pool = pool.translate(str.maketrans("", "", ignore))
+    ignore = get_ignore(argp)
+    pool = pool.translate(str.maketrans("", "", ignore))
     hints = []
     if argp.hints:
         hints = argp.hints

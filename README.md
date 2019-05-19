@@ -4,8 +4,8 @@ Remaps the input string to random characters.
 # Usage
 Run with python 3. 
 ```bash
-$ python3 remapper.py [-h] [-v] [-a] [-n] [-aL] [-aU] [-p POOL] [-i IGNORE]
-                      [-e ERRCHAR] [-l HINTS [HINTS ...]]
+$ python3 remapper.py [-h] [-v] [-p POOL] [-a] [-n] [-aL] [-aU] [-i IGNORE] [-iP]
+                      [-iN] [-e ERRCHAR] [-l HINTS [HINTS ...]]
                       input
 ```
 
