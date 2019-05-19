@@ -40,7 +40,7 @@ $ python3 remapper.py "remap this string" -v -p abcde1234567
 
 Ignore specified characters: 
 ```
-$ python3 remapper.py "remap this string!!" -v -i remap!
+$ python3 remapper.py "remap this string!" -v -i remap!
 [+] Map:      {'r': 'r', 'e': 'e', 'm': 'm', 'a': 'a', 'p': 'p', '!': '!', ' ': 'Q', 't': '=', 'h': '|', 'i': '{', 's': 'z', 'n': '4', 'g': 'c'}
 [+] Original: remap this string!
 [+] Pool:     l/zy}xR[&sP1L4(0buc~;7C-w{Eg5'*Jk="9,@Fh_nY?U3tiGoSq)<TWBKfVZQdO:#X2%H>8vj^.\6M`I]A|N+D$
