@@ -22,10 +22,14 @@ def get_args():
             help="string to remap")
     p.add_argument("-v", "--verbose", action="store_true", dest="verbose", 
             help="produce verbose output")
-    p.add_argument("-a", "--alph", action="store_true", dest="alph", 
+    p.add_argument("-a", "--alpha", action="store_true", dest="alph", 
             help="include all alphabetical characters")
-    p.add_argument("-an", "--alphnum", action="store_true", dest="alphnum", 
-            help="include all alphabetical and numerical characters")
+    p.add_argument("-n", "--num", action="store_true", dest="num", 
+            help="include all numerical characters")
+    p.add_argument("-aL", "--lower", action="store_true", dest="alphlow", 
+            help="include all lower alphabetical characters")
+    p.add_argument("-aU", "--upper", action="store_true", dest="alphup", 
+            help="include all upper alphabetical characters")
     p.add_argument("-p", "--pool", type=str, dest="pool", default="", 
             help="pool of random characters that can be mapped")
     p.add_argument("-i", "--ignore", type=str, dest="ignore", default="", 
@@ -65,22 +69,20 @@ def get_mapped(inp, pool, ignore, errchar, hints):
     return output, mapper
 
 
-def get_pool(pool, alph=False, alphnum=False, custom_pool=False):
+def get_pool(argp):
     """
     Returns a pool of characters used for randomisation. 
     """
-    ret = None
-    if alphnum and custom_pool:
-        ret = pool + string.ascii_letters + string.digits
-    elif alphnum:
-        ret = string.ascii_letters + string.digits
-    elif alph and custom_pool:
-        ret = pool + string.ascii_letters
-    elif alph:
-        ret = string.ascii_letters
-    elif pool:
-        ret = pool
-    else:
+    ret = argp.pool
+    if argp.alph:
+        ret += string.ascii_letters
+    if argp.num:
+        ret += string.digits
+    if argp.alphlow:
+        ret += string.ascii_lowercase
+    if argp.alphup:
+        ret += string.ascii_uppercase
+    if not ret:
         ret = string.ascii_letters + string.digits + string.punctuation
     return "".join(set(ret))
 
@@ -109,8 +111,7 @@ if __name__ == "__main__":
     errchar = "<ERROR>"
     if argp.errchar:
         errchar = argp.errchar
-    pool = get_pool(argp.pool, argp.alph, argp.alphnum, argp.pool != "")
-    pool = "".join(set(pool))       # remove duplicated characters
+    pool = get_pool(argp)
     ignore = ""
     if argp.ignore:
         ignore = argp.ignore
@@ -124,6 +125,7 @@ if __name__ == "__main__":
     if argp.verbose:
         print("[+] Map:      %s" %mapper)
         print("[+] Original: %s" %inpstr)
+        print("[+] Pool:     %s" %pool)
         print("[+] Ignored:  %s" %ignore)
         print("[+] Hints:    %s" %hints)
         print("[+] Output:   ", end="")
