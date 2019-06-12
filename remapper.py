@@ -24,14 +24,16 @@ def get_args():
             help="produce verbose output")
     p.add_argument("-p", "--pool", type=str, dest="pool", default="", 
             help="pool of random characters that can be mapped")
-    p.add_argument("-a", "--alpha", action="store_true", dest="alph", 
+    p.add_argument("-pA", "--pool-alph", action="store_true", dest="alph", 
             help="include all alphabetical characters")
-    p.add_argument("-n", "--num", action="store_true", dest="num", 
+    p.add_argument("-pN", "--pool-num", action="store_true", dest="num", 
             help="include all numerical characters")
-    p.add_argument("-aL", "--lower", action="store_true", dest="alphlow", 
+    p.add_argument("-pL", "--pool-lower", action="store_true", dest="alphlow", 
             help="include all lower alphabetical characters")
-    p.add_argument("-aU", "--upper", action="store_true", dest="alphup", 
+    p.add_argument("-pU", "--pool-upper", action="store_true", dest="alphup", 
             help="include all upper alphabetical characters")
+    p.add_argument("-pP", "--pool-punc", action="store_true", dest="punc", 
+            help="include all punctuation characters")
     p.add_argument("-i", "--ignore", type=str, dest="ignore", default="", 
             help="pool of characters to ignore")
     p.add_argument("-iP", "--ignore-punc", action="store_true", dest="igp", 
@@ -86,8 +88,10 @@ def get_pool(argp):
         ret += string.ascii_lowercase
     if argp.alphup:
         ret += string.ascii_uppercase
+    if argp.punc:
+        ret += string.punctuation
     if not ret:
-        ret = string.ascii_letters + string.digits + string.punctuation
+        ret += string.ascii_letters + string.digits + string.punctuation
     return "".join(set(ret))
 
 
@@ -139,6 +143,7 @@ if __name__ == "__main__":
     if argp.verbose:
         print("[+] Map:      %s" %mapper)
         print("[+] Original: %s" %inpstr)
+        print("[+] Unique:   %s" %len("".join(set(inpstr))))
         print("[+] Pool:     %s" %pool)
         print("[+] Ignored:  %s" %ignore)
         print("[+] Hints:    %s" %hints)
