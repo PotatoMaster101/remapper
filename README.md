@@ -4,9 +4,10 @@ Remaps the input string to random characters.
 # Usage
 Run with python 3. 
 ```bash
-$ python3 remapper.py [-h] [-v] [-p POOL] [-a] [-n] [-aL] [-aU] [-i IGNORE] [-iP]
-                      [-iN] [-e ERRCHAR] [-l HINTS [HINTS ...]]
+$ python3 remapper.py [-h] [-v] [-p POOL] [-pA] [-pN] [-pL] [-pU] [-pP]
+                      [-i IGNORE] [-iP] [-iN] [-e ERRCHAR] [-l HINTS [HINTS ...]]
                       input
+
 ```
 
 # Example
@@ -51,7 +52,7 @@ $ python3 remapper.py "remap this string!" -v -i remap!
 
 Only map to lowercase letters and brackets:
 ```
-$ python3 remapper.py "remap this string!" -v -a -p "{}()<>"
+$ python3 remapper.py "remap this string!" -v -pL -p "{}()<>"
 [+] Map:      {'r': 'j', 'e': 'w', 'm': 'e', 'a': 'b', 'p': 'm', ' ': 'l', 't': 'r', 'h': 'o', 'i': 'y', 's': 'k', 'n': '{', 'g': 'p', '!': 'd'}
 [+] Original: remap this string!
 [+] Pool:     fe}qt<bcrwxpdsz{>iolgamjhuk(n)vy
