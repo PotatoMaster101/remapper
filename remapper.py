@@ -42,7 +42,7 @@ def get_args():
             help="ignore all numerical characters")
     p.add_argument("-e", "--error", type=str, dest="errchar", default="", 
             help="error character style")
-    p.add_argument("-l", "--list", type=str, nargs="+", dest="hints", 
+    p.add_argument("-l", "--hints", type=str, nargs="+", dest="hints", 
             help="list of hints in the form of x=y", default=None)
     return p
 
@@ -128,25 +128,20 @@ if __name__ == "__main__":
     Entry point. 
     """
     argp = get_args().parse_args()
-    errchar = "<ERROR>"
-    if argp.errchar:
-        errchar = argp.errchar
+    errchar = "<ERROR>" if not argp.errchar else argp.errchar
+    hints = [] if not argp.hints else argp.hints
     pool = get_pool(argp)
     ignore = get_ignore(argp)
     pool = pool.translate(str.maketrans("", "", ignore))
-    hints = []
-    if argp.hints:
-        hints = argp.hints
-    inpstr = argp.input
 
-    output, mapper = get_mapped(inpstr, pool, ignore, errchar, hints)
+    output, mapper = get_mapped(argp.input, pool, ignore, errchar, hints)
     if argp.verbose:
         print("[+] Map:      %s" %mapper)
-        print("[+] Original: %s" %inpstr)
-        print("[+] Unique:   %s" %len("".join(set(inpstr))))
+        print("[+] Original: %s" %argp.input)
+        print("[+] Unique:   %s" %len("".join(set(argp.input))))
         print("[+] Pool:     %s" %pool)
         print("[+] Ignored:  %s" %ignore)
         print("[+] Hints:    %s" %hints)
-        print("[+] Output:   ", end="")
+        print("[+] Error:    %s" %errchar)
     print(output)
 
