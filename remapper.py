@@ -11,6 +11,7 @@
 import argparse
 import string
 import random
+import sys
 from collections import OrderedDict
 
 def get_args():
@@ -44,6 +45,10 @@ def get_args():
             help="error character style")
     p.add_argument("-l", "--hints", type=str, nargs="+", dest="hints", 
             help="list of hints in the form of x=y", default=None)
+    p.add_argument("-o", "--out-file", type=str, dest="outf", default="", 
+            help="output file to write to")
+    p.add_argument("-f", "--from-file", action="store_true", dest="fromf", 
+            help="indicates that the input is a file name")
     return p
 
 
@@ -101,10 +106,20 @@ def get_ignore(argp):
     """
     ret = argp.ignore
     if argp.igp:
-        ret += string.punctuation + " "
+        ret += string.punctuation + " \n\r"
     if argp.ign:
         ret += string.digits
     return "".join(set(ret))
+
+
+def get_input(argp):
+    """
+    Returns the user input. 
+    """
+    if not argp.fromf:
+        return argp.input
+    with open(argp.input) as f:
+        return f.read()
 
 
 def parse_hint(hint):
@@ -128,20 +143,24 @@ if __name__ == "__main__":
     Entry point. 
     """
     argp = get_args().parse_args()
-    errchar = "<ERROR>" if not argp.errchar else argp.errchar
-    hints = [] if not argp.hints else argp.hints
+    usrinp = get_input(argp)
     pool = get_pool(argp)
     ignore = get_ignore(argp)
+    outf = sys.stdout if not argp.outf else open(argp.outf, "w+")
+    errchar = "<ERROR>" if not argp.errchar else argp.errchar
+    hints = [] if not argp.hints else argp.hints
     pool = pool.translate(str.maketrans("", "", ignore))
 
-    output, mapper = get_mapped(argp.input, pool, ignore, errchar, hints)
+    output, mapper = get_mapped(usrinp, pool, ignore, errchar, hints)
     if argp.verbose:
         print("[+] Map:      %s" %mapper)
-        print("[+] Original: %s" %argp.input)
-        print("[+] Unique:   %s" %len("".join(set(argp.input))))
+        print("[+] Original: %s" %usrinp)
+        print("[+] Unique:   %s" %len("".join(set(usrinp))))
         print("[+] Pool:     %s" %pool)
         print("[+] Ignored:  %s" %ignore)
         print("[+] Hints:    %s" %hints)
         print("[+] Error:    %s" %errchar)
-    print(output)
+    print(output, file=outf)
+    if argp.outf:
+        outf.close()
 

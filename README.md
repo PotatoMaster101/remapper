@@ -5,8 +5,9 @@ Remaps the input string to random characters.
 Run with python 3. 
 ```bash
 $ python3 remapper.py [-h] [-v] [-p POOL] [-pA] [-pN] [-pL] [-pU] [-pP]
-                      [-i IGNORE] [-iP] [-iN] [-e ERRCHAR] [-l HINTS [HINTS ...]]
-                      input
+                   [-i IGNORE] [-iP] [-iN] [-e ERRCHAR] [-l HINTS [HINTS ...]]
+                   [-o OUTF] [-f]
+                   input
 
 ```
 
@@ -81,5 +82,21 @@ $ python3 remapper.py "abcdefgh" -v -p abc -e "<char empty>"
 [+] Ignored:  
 [+] Hints:    []
 [+] Output:   acb<char empty><char empty><char empty><char empty><char empty>
+```
+
+Read from text file:
+```
+$ cat text.txt
+abcabc
+defdef
+$ python3 remapper.py -f text.txt
+>GT>GTq{j;{j;q
+```
+
+Write output to file:
+```
+$ python3 remapper.py "remap me!" -o out.txt
+$ cat out.txt
+-v2TP%2vQ
 ```
 
